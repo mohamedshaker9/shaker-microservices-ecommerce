@@ -12,6 +12,8 @@ This project consists of the following microservices till now:
 - **AI Chat Service** - AI-powered customer support
 - **Config Server** - Centralized configuration management
 
+<img src="docs/microservices-arch.png" alt="Microservices Arch" width="500" height="auto">
+
 ## Tech Stack
 
 - **Backend**: Spring Boot 3.5.9, Java 21
