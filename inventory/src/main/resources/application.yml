@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: inventory
+
+  profiles:
+    active: dev
+
+  config:
+    import: configserver:${config_server_url}
+
+
+

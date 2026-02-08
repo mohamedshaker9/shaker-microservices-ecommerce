@@ -1,0 +1,21 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: aichat
+
+  profiles:
+    active: dev
+
+  config:
+    import: configserver:${config.server.url}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: env,conditions,beans,configprops
+  endpoint:
+    env:
+      show-values: ALWAYS

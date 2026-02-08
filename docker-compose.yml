@@ -1,0 +1,44 @@
+services:
+  db_postgres:
+    image: postgres:16.11-alpine3.23
+    container_name: micro_ecom_shaker_db
+    restart: always
+    environment:
+      POSTGRES_USER: micro_ecom_user
+      POSTGRES_PASSWORD: micro_ecom_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/01-init-db.sql:ro
+    networks:
+      - net_postgres
+
+  vectordb:
+    image: 'qdrant/qdrant:latest'
+    container_name: micro_ecom_shaker_vectordb
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+
+  pgadmin:
+    image: dpage/pgadmin4:9.11.0
+    container_name: micro_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db_postgres
+    networks:
+      - net_postgres
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  net_postgres:
+    driver: bridge
