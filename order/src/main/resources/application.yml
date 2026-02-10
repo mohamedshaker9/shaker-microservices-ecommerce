@@ -10,3 +10,10 @@ spring:
 
   config:
     import: configserver:${config.server.url}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service_discovery_url}
+    register-with-eureka: true
+    fetch-registry: true

@@ -11,5 +11,13 @@ spring:
   config:
     import: configserver:${config_server_url}
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service_discovery_url}
+    register-with-eureka: true
+    fetch-registry: true
+
+
 
 
