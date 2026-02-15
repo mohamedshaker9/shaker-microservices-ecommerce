@@ -2,10 +2,9 @@
 package com.shaker.ecommicro.order.service;
 
 
-import com.shaker.ecommicro.order.dto.CartDto;
-import com.shaker.ecommicro.order.dto.CartItemDetialsDto;
-import com.shaker.ecommicro.order.dto.CartItemDto;
-import com.shaker.ecommicro.order.dto.CartItemRequestDto;
+import com.shaker.ecommicro.order.clients.IProductServiceClient;
+import com.shaker.ecommicro.order.clients.InventoryProductClient;
+import com.shaker.ecommicro.order.dto.*;
 import com.shaker.ecommicro.order.exceptions.BusinessException;
 import com.shaker.ecommicro.order.exceptions.ResourceNotFoundException;
 import com.shaker.ecommicro.order.model.Cart;
@@ -14,7 +13,9 @@ import com.shaker.ecommicro.order.repository.CartRepo;
 import com.shaker.ecommicro.order.repository.ICartItemRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ public class CartService {
 
     private final CartRepo cartRepo;
     private final ICartItemRepo cartItemRepo;
+    private final InventoryProductClient inventoryProductClient;
+
 //    private final AuthUtils authUtils;
 
     @Transactional
@@ -57,13 +60,15 @@ public class CartService {
 
         for (CartItemRequestDto itemRequest : cartItemRequests) {
             //TODO get the product from inventory system
+            ProductDTO product = inventoryProductClient.getOrThrow(itemRequest.getId());
+
 //            Product product = productRepo.findById(itemRequest.getId())
 //                    .orElseThrow(() -> new ResourceNotFoundException("Product", "id", itemRequest.getId()));
             //TODO validating the quantity
-//            if (product.getQuantity() < itemRequest.getQuantity()) {
-//                throw new BusinessException("Insufficient stock for product: " + product.getName() +
-//                        ". Available: " + product.getQuantity() + ", Requested: " + itemRequest.getQuantity());
-//            }
+            if (product.getQuantity() < itemRequest.getQuantity()) {
+                throw new BusinessException("Insufficient stock for product: " + product.getProductName() +
+                        ". Available: " + product.getQuantity() + ", Requested: " + itemRequest.getQuantity());
+            }
 
 //            double itemPrice = product.getSpecialPrice() != null ? product.getSpecialPrice() : product.getPrice();
 //            double itemDiscount = product.getDiscount() != null ? product.getDiscount() : 0.0;
@@ -97,7 +102,7 @@ public class CartService {
     }
 
     public CartDto getCartById(Long cartId) throws ResourceNotFoundException {
-        Cart cart = cartRepo.findById(cartId.intValue())
+        Cart cart = cartRepo.findById(cartId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "id", cartId));
 
         return mapCartToDto(cart);

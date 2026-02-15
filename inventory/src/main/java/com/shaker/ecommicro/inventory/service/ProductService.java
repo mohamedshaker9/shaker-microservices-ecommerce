@@ -98,6 +98,12 @@ public class ProductService implements IProductService {
         return productResponse;
     }
 
+    @Override
+    public ProductDTO get(Long productId) throws ResourceNotFoundException {
+        Product product = IProductRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+        return modelMapper.map(product, ProductDTO.class);
+    }
 
     private Sort getSort(String sortOrder, String sortBy) {
 

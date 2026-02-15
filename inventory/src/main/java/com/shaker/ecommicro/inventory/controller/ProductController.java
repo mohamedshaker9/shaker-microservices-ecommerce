@@ -37,6 +37,11 @@ public class ProductController {
             return new ResponseEntity<>(productService.get(productsFilter), HttpStatus.OK);
     }
 
+    @GetMapping("/products/{productId}")
+    public ResponseEntity<ProductDTO> get(@PathVariable Long productId) throws ResourceNotFoundException {
+        return new ResponseEntity<>(productService.get(productId), HttpStatus.OK);
+    }
+
     @GetMapping("/public/category/{categoryId}/products")
     public ResponseEntity<ProductResponse> getByCategory(@PathVariable Long categoryId) throws ResourceNotFoundException {
         return new ResponseEntity<>(productService.getByCategory(categoryId), HttpStatus.FOUND);
@@ -46,6 +51,7 @@ public class ProductController {
     public ResponseEntity<ProductResponse> searchByKeyword(@PathVariable String keyword) throws ResourceNotFoundException {
         return new ResponseEntity<>(productService.getByKeyword(keyword), HttpStatus.FOUND);
     }
+
 
     @PutMapping("/admin/products/{productId}")
     public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO,

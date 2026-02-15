@@ -14,7 +14,7 @@ public interface IProductService {
     ProductDTO add(ProductDTO productDTO, Long categoryId) throws ResourceNotFoundException;
 
     ProductResponse get(ProductsFilter productsFilter) throws ResourceNotFoundException;
-
+    ProductDTO get(Long productId) throws ResourceNotFoundException;
     ProductResponse getByCategory(Long categoryId) throws ResourceNotFoundException;
      ProductResponse getByCategory(String name) throws ResourceNotFoundException;
     ProductResponse getByKeyword(String keyword) throws ResourceNotFoundException;
