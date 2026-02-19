@@ -12,3 +12,26 @@ spring:
 
 stripe:
   secret-key: ${STRIPE_SECRET_KEY}
+
+
+logging:
+  file:
+    name: logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
+
+# Prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["*", "prometheus"]
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true

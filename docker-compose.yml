@@ -35,6 +35,15 @@ services:
       - db_postgres
     networks:
       - net_postgres
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - net_postgres
+
 volumes:
   postgres_data:
   pgadmin_data:

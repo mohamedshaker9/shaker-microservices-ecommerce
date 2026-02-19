@@ -33,9 +33,28 @@ spring:
         port: 6334
 
 logging:
-  level:
-    org.springframework.http.client: DEBUG
-    org.springframework.web.client: DEBUG
+  file:
+    name: logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10
+
+
+# Prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["*", "prometheus"]
+  tracing:
+    sampling:
+      probability: 1.0
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 
 
 

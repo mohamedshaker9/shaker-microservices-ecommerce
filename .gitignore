@@ -110,3 +110,5 @@ logs/
 
 # Spring Boot
 spring-boot-devtools.properties
+
+/evaluate-loki-prometheus/.data/
