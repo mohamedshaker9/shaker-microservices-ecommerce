@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+
+  profiles:
+    active: dev
+
+  config:
+    import: configserver:${config.server.url}

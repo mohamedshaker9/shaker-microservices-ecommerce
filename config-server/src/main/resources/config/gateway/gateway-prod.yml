@@ -1,0 +1,57 @@
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: inventory
+#          uri: lb://inventory
+#          predicates:
+#            - Path=/api/v1/public/products/**, /api/v1/admin/products/**, /api/v1/public/categories
+#        - id: aichat
+#          uri: lb://aichat
+#          predicates:
+#            - Path=/api/v1/chat/**
+#        - id: order
+#          uri: lb://order
+#          predicates:
+#            - Path=/api/v1/carts/**, /api/v1/orders/**
+#        - id: eureka-web
+#          uri: http://localhost:8761
+#          predicates:
+#            - Path=/eureka/web
+#          filters:
+#            - SetPath=/
+#        - id: eureka-resources
+#          uri: http://localhost:8761
+#          predicates:
+#            - Path=/eureka/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${service_discovery_url}
+    register-with-eureka: true
+    fetch-registry: true
+
+# Prometheus
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["*", "prometheus"]
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: INFO
+    org.springframework.cloud.gateway: TRACE
+
